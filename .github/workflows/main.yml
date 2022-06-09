@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         projectPath:
-          - SampleGameCI
+          - .
         testMode:
           - playmode
           - editmode
