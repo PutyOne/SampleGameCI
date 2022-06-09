@@ -18,10 +18,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Setup Unity
-        uses: kuler90/setup-unity@v1
-  
+        
+      - uses: game-ci/unity-builder@v2
+        with:
+        customImage: 'unityci/editor:2020.3.35f1-base-0'
+ 
       - name: Create LFS file list
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
 
