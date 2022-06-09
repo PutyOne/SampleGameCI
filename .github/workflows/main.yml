@@ -6,15 +6,12 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
-  testRunner:
-    name: Test in ${{ matrix.testMode }} ✨
+    buildWindows:
+    needs: testRunner
+    name: Build for Windows 🖥️
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        testMode:
-          - EditMode
-          - PlayMode
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -38,18 +35,15 @@ jobs:
         uses: actions/cache@v2
         with:
           path: Library
-          key: Library-test-project-${{ matrix.targetPlatform }}
+          key: Library-build-StandaloneWindows64
           restore-keys: |
-            Library-test-project-
+            Library-build-
             Library-
-      - uses: game-ci/unity-test-runner@v2.0-alpha-5
-        id: testRunner
+      - uses: game-ci/unity-builder@v2
         with:
-          testMode: ${{ matrix.testMode }}
-          checkName: ${{ matrix.testMode }} test results
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          targetPlatform: StandaloneWindows64
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Test results (${{ matrix.testMode }})
-          path: ${{ steps.testRunner.outputs.artifactsPath }}
+          name: build-StandaloneWindows64
+          path: build/StandaloneWindows64
